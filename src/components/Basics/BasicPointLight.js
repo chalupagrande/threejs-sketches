@@ -10,7 +10,7 @@ class BasicPointLight {
     this.options = o
     this.pointLight = new THREE.PointLight(o.color)
     this.pointLight.position.set(...o.position)
-    // this.pointLight.castShadow = true
+    this.pointLight.castShadow = true
   }
 
   addTo = scene => {

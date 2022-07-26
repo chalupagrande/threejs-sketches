@@ -1,14 +1,11 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
-import { GUI } from 'dat.gui'
-import FlippingCube from '../components/FlippingCube'
+import FlippingCube from '../components/FlippingCubes/BasicFlippingCube'
 import BasicPointLight from '../components/Basics/BasicPointLight'
-import { random } from '../lib/utils'
-import { degToRad, radToDeg } from 'three/src/math/MathUtils'
-import { LEFT, RIGHT, FORWARD, BACK} from '../lib/constants'
+import { LEFT, RIGHT, FORWARD, BACK, STAY } from '../lib/constants'
 
-function BoilerPlate(canvas) {
+function FlippingCubes(canvas) {
   // globals
   let opts = {
     w: window.innerWidth,
@@ -108,22 +105,25 @@ function BoilerPlate(canvas) {
   function setFlipDir(event) {
     event.preventDefault()
     switch (event.code) {
-      case "ArrowUp":
+      case 'ArrowUp':
         flipDir = BACK
-        break;
-      case "ArrowDown":
+        break
+      case 'ArrowDown':
         flipDir = FORWARD
-        break;
-      case "ArrowRight":
+        break
+      case 'ArrowRight':
         flipDir = RIGHT
-        break;
-      case "ArrowLeft":
+        break
+      case 'ArrowLeft':
         flipDir = LEFT
-        break;
+        break
+      case 'Space':
+        flipDir = STAY
+        break
       default:
-        break;
+        break
     }
   }
 }
 
-export default BoilerPlate
+export default FlippingCubes

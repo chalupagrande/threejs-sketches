@@ -5,17 +5,23 @@ import BasicPointLight from '../components/Basics/BasicPointLight'
 import Grid from '../components/Basics/Grid'
 
 /**
- * This is a scene that allows you to build an object, reload that object
- * press spacebar to demonstrate the save and reload function. Open the terminal.
- * @param {*} canvas
+ * The goal of this scene is to be able to load
+ * previously build scenes using GridPlacement,
+ * and render them on the new scene.
  */
-function GridPlacement(canvas) {
+
+const gridToLoad =
+  '{"dimensions":{"x":10,"y":10,"z":10},"offset":{"x":4.5,"y":-0.5,"z":4.5},"scale":20,"shape":{"x":10,"y":10,"z":10},"grid":[[[1,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],[[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],[[1,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],[[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],[[1,0,0,0,0,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],[[0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],[[1,0,0,0,0,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],[[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],[[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],[[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]]]}'
+function GridLoader(canvas) {
   // globals
+
+  const grid = new Grid()
+  grid.load(gridToLoad)
   let opts = {
     w: window.innerWidth,
     h: window.innerHeight,
-    voxelSize: 20,
-    gridSize: 10,
+    voxelSize: grid.scale,
+    gridSize: grid.shape.x,
   }
 
   let scene,
@@ -24,7 +30,6 @@ function GridPlacement(canvas) {
     controls,
     pointLight,
     plane,
-    grid,
     raycaster,
     pointer,
     rollOverMesh,
@@ -61,10 +66,11 @@ function GridPlacement(canvas) {
     //camera
     camera.position.z = 200
     camera.position.y = 200
+
     // grid
     const { voxelSize, gridSize } = opts
-    const gridSizeVector = new THREE.Vector3(gridSize, gridSize, gridSize)
-    grid = new Grid(gridSizeVector, voxelSize)
+    // const gridSizeVector = new THREE.Vector3(gridSize, gridSize, gridSize)
+    // grid = new Grid(gridSizeVector, voxelSize)
 
     // // gridhelper
     const gridHelper = new THREE.GridHelper(gridSize * voxelSize, gridSize)
@@ -93,7 +99,7 @@ function GridPlacement(canvas) {
     cubeMat = new THREE.MeshStandardMaterial({ color: 0xff0000 })
 
     // plane
-    const planeSize = opts.voxelSize * opts.gridSize
+    const planeSize = voxelSize * gridSize
     const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize)
     planeGeo.rotateX(-Math.PI / 2)
     plane = new THREE.Mesh(
@@ -105,6 +111,19 @@ function GridPlacement(canvas) {
     console.log(plane.position)
     objects.push(plane)
     scene.add(plane)
+
+    // PLACE OBJECTS FROM GRID
+    grid.loop((val, coords) => {
+      if (val) {
+        const pos = grid.getWorldCoordinatesFromGrid(coords)
+
+        // create new box
+        const cube = new THREE.Mesh(cubeGeo, cubeMat)
+        cube.position.set(...pos)
+        scene.add(cube)
+        objects.push(cube)
+      }
+    })
 
     renderer.setSize(opts.w, opts.h)
   }
@@ -205,9 +224,6 @@ function GridPlacement(canvas) {
       case 16:
         isShiftDown = true
         break
-      case 32:
-        saveAndReload()
-        break
     }
   }
 
@@ -218,19 +234,6 @@ function GridPlacement(canvas) {
         break
     }
   }
-
-  function saveAndReload() {
-    // remove all objects
-    grid.save()
-    const filtered = objects.filter(e => {
-      if (e !== plane) {
-        scene.remove(e)
-        return false
-      }
-      return true
-    })
-    objects = filtered
-  }
 }
 
-export default GridPlacement
+export default GridLoader

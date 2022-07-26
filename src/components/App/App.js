@@ -1,12 +1,12 @@
 import React from 'react'
 import Sketch from '../Sketch'
-import FlippingCubes from '../../scenes/FlippingCubes'
 import GridPlacement from '../../scenes/GridPlacement'
+import AssemblingCubes from '../../scenes/AssemblingCubes/AssemblingCubes'
 
 function App() {
   return (
     <div className="App">
-      <Sketch sketch={GridPlacement} />
+      <Sketch sketch={AssemblingCubes} />
     </div>
   )
 }

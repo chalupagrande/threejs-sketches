@@ -22,7 +22,9 @@ function BoilerPlate(canvas) {
     controls,
     pointLight,
     plane,
-    timeStep = 0
+    timeStep = 0,
+    raycaster,
+    pointer
   // stats
   const stats = Stats()
   document.body.appendChild(stats.dom)
@@ -54,6 +56,10 @@ function BoilerPlate(canvas) {
     //camera
     camera.position.z = 20
     camera.position.y = 20
+
+    //raycaster
+    raycaster = new THREE.Raycaster()
+    pointer = new THREE.Vector2()
 
     // light
     pointLight = new BasicPointLight({ position: new THREE.Vector3(10, 20, 10) })
@@ -112,6 +118,7 @@ function BoilerPlate(canvas) {
   animate()
 
   window.addEventListener('resize', onWindowResize, false)
+  window.addEventListener('pointermove', onPointerMove)
 
   function onWindowResize() {
     opts.w = window.innerWidth
@@ -120,6 +127,23 @@ function BoilerPlate(canvas) {
     camera.updateProjectionMatrix()
 
     renderer.setSize(window.innerWidth, window.innerHeight)
+  }
+
+  function onPointerMove(event) {
+    // calculate pointer position in normalized device coordinates
+    // (-1 to +1) for both components
+
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
+    const meshes = cubes.map(e => e.mesh)
+    raycaster.setFromCamera(pointer, camera)
+    const intersects = raycaster.intersectObjects(meshes, false)
+    if (intersects.length > 0) {
+      const intersect = intersects[0]
+      const object = intersect.object
+      object.material.color.set(0xff0000)
+      
+    }
   }
 }
 
