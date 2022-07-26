@@ -1,7 +1,5 @@
-import * as THREE from 'three'
 import BasicFlippingCube, { BasicFlippingCubeDefaults } from './BasicFlippingCube'
-import { generateId, isPerpendicular } from '../../lib/utils'
-import { ZERO, DIRECTIONS } from '../../lib/constants'
+import { generateId } from '../../lib/utils'
 import { aStar, AssemblingNode } from '../../lib/Graph'
 
 export const AssemblingCubeDefaults = {
@@ -21,11 +19,14 @@ class AssemblingCube extends BasicFlippingCube {
     // this.rotation = 0
     // this.isDone = false
     // this.speed = 1
-    this.id = generateId
+    this.id = generateId()
     this.target = null // current target vector in grid coordinates
+    this.gridPos = null
     this.curDirection = null // current normal direction vector
     this.curFloor = null // current floor vector Perpendicular to curDirection
-    this.gridPos = null
+    this.path = null
+    this.step = 0
+    this.done = false
   }
 
   //  ___ _  _ _  _ ___ ___ ___ _____ ___ ___
@@ -41,22 +42,58 @@ class AssemblingCube extends BasicFlippingCube {
   // setOfRotation
   // setDone
 
-  assemble(game) {
-    const grid = game.grid
-    if (this.rotation === 0) {
+  init(game) {
+    if (!this.path) {
+      // do not update gridPosition, otherwise path finding might use
+      // its current position as a
       const curPos = this.mesh.position.clone()
-      const gridPos = grid.getGridCoordinatesFromWorld(curPos)
-      const closestTarget = game.findClosestTarget(gridPos)
-      this.target = closestTarget
-      this.gridPos = gridPos
-      // this.findPathToTarget(game)
+      const gridPos = game.grid.getGridCoordinatesFromWorld(curPos)
+      this.target = game.findClosestTarget(gridPos)
+      this.path = this.findPathToTarget(gridPos, this.target, game)
+      const { position: nextPos, possibleFloors } = this.path[this.step].data
+      const direction = nextPos.clone().sub(gridPos)
+      this.curDirection = direction
+      this.curFloor = possibleFloors[0]
+      this.updateGridPosition(game)
     }
   }
 
-  findPathToTarget(game) {
-    console.time('aStar')
-    const startNode = new AssemblingNode(this.gridPos)
-    const targetNode = new AssemblingNode(this.target)
+  assemble(game) {
+    if (this.done) return
+    if (this.step < this.path.length) {
+      this.flip(game)
+    }
+  }
+
+  flip(game) {
+    if (this.rotation >= 90) {
+      const step = this.step + 1
+      if (step === this.path.length) {
+        return (this.done = true)
+      }
+      const { position: nextPos, possibleFloors } = this.path[step].data
+      this.updateGridPosition(game)
+      const direction = nextPos.clone().sub(this.gridPos)
+      this.curDirection = direction
+      this.curFloor = possibleFloors[0]
+      this.step = step
+    }
+    super.flip(this.curDirection, this.curFloor)
+  }
+
+  updateGridPosition(game) {
+    const curGridPos = this.gridPos
+    if (curGridPos) game.grid.set(curGridPos, 0)
+    const curPos = this.mesh.position.clone()
+    const gridPos = game.grid.getGridCoordinatesFromWorld(curPos)
+    game.grid.set(gridPos, 1)
+    this.gridPos = gridPos
+    return gridPos
+  }
+
+  findPathToTarget(startPos, targetPos, game) {
+    const startNode = new AssemblingNode(startPos)
+    const targetNode = new AssemblingNode(targetPos)
     const path = aStar(
       startNode,
       targetNode,
@@ -70,19 +107,7 @@ class AssemblingCube extends BasicFlippingCube {
       },
       game.calcDistanceBetweenNodes,
     )
-    console.timeEnd('aStar')
-  }
-
-  /**
-   * adds the Cube to Grid
-   * @param {*} grid
-   * @param {*} position
-   */
-  addToGrid(grid, position) {
-    this.grid = grid
-    this.mesh.position.set(position)
-    this.rotation.set(ZERO)
-    this.grid.setByPosition(position)
+    return path
   }
 }
 

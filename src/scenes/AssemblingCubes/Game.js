@@ -49,13 +49,13 @@ class Game {
 
       const cube = new AssemblingCube({
         position: randomWorldPos,
-        speed: random(0.5, 2),
+        speed: 3,
         size: this.grid.scale,
       })
       cube.addTo(this.scene)
+      cube.init(this)
       this.cubes.push(cube)
       // set its current position
-      this.grid.set(randomGridPos, 1)
     })
   }
 

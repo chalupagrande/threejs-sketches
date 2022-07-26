@@ -1,11 +1,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import Stats from 'three/examples/jsm/libs/stats.module'
-import AssemblingCube from '../../components/FlippingCubes/AssemblingCube'
 import BasicPointLight from '../../components/Basics/BasicPointLight'
-import { LEFT, RIGHT, FORWARD, BACK, STAY, DOWN, UP } from '../../lib/constants'
 import Game from './Game'
-import { Vector2 } from 'three'
 
 function AssemblingCubes(canvas) {
   // globals

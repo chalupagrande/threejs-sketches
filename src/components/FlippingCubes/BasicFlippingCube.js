@@ -1,4 +1,3 @@
-import * as THREE from 'three'
 import BasicCube, { BasicCubeDefaults } from '../Basics/BasicCube'
 import { rotateAboutPoint, degToRad } from '../../lib/utils'
 import {
@@ -32,7 +31,7 @@ class BasicFlippingCube extends BasicCube {
     this.ofRotation = null
     this.rotation = 0
     this.isDone = false
-    this.speed = 1
+    this.speed = options.speed
   }
 
   //  ___ _  _ _  _ ___ ___ ___ _____ ___ ___

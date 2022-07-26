@@ -1,6 +1,5 @@
 import { Vector3 } from 'three'
 import { saveFile } from '../../lib/utils'
-import { LEFT, RIGHT, UP, DOWN, FORWARD, BACK } from '../../lib/constants'
 
 class Grid {
   constructor(dimensions, scale = 1) {
@@ -70,7 +69,7 @@ class Grid {
     return vector.clone().sub(this.offset).multiplyScalar(this.scale)
   }
   getGridCoordinatesFromWorld(vector) {
-    return vector.clone().divideScalar(this.scale).add(this.offset)
+    return vector.clone().divideScalar(this.scale).add(this.offset).round()
   }
 
   setByPosition(vector, val) {

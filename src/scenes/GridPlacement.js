@@ -208,6 +208,8 @@ function GridPlacement(canvas) {
       case 32:
         saveAndReload()
         break
+      default:
+        break
     }
   }
 
@@ -215,6 +217,8 @@ function GridPlacement(canvas) {
     switch (event.keyCode) {
       case 16:
         isShiftDown = false
+        break
+      default:
         break
     }
   }
