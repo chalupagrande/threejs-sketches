@@ -87,7 +87,8 @@ class Grid {
   }
 
   load(json) {
-    const parsed = JSON.parse(json)
+    const parsed = typeof json === 'string' ? JSON.parse(json) : json
+    debugger
     this.scale = parsed.scale
     this.shape = new Vector3(...Object.values(parsed.shape))
     this.offset = new Vector3(...Object.values(parsed.offset))

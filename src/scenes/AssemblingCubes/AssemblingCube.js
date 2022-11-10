@@ -1,6 +1,9 @@
-import BasicFlippingCube, { BasicFlippingCubeDefaults } from './BasicFlippingCube'
+import BasicFlippingCube, {
+  BasicFlippingCubeDefaults,
+} from '../../components/FlippingCubes/BasicFlippingCube'
 import { generateId } from '../../lib/utils'
-import { aStar, AssemblingNode } from '../../lib/Graph'
+import { aStar } from '../../lib/Graph'
+import { AssemblingNode } from './AssemblingCubesNode'
 
 export const AssemblingCubeDefaults = {
   ...BasicFlippingCubeDefaults,
@@ -49,7 +52,12 @@ class AssemblingCube extends BasicFlippingCube {
       const curPos = this.mesh.position.clone()
       const gridPos = game.grid.getGridCoordinatesFromWorld(curPos)
       this.target = game.findClosestTarget(gridPos)
+
       this.path = this.findPathToTarget(gridPos, this.target, game)
+      // cube spawned where it needs to be
+      if (this.path.length === 0) {
+        return (this.done = true)
+      }
       const { position: nextPos, possibleFloors } = this.path[this.step].data
       const direction = nextPos.clone().sub(gridPos)
       this.curDirection = direction

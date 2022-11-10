@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 import BasicCube from '../../components/Basics/BasicCube'
 import Grid from '../../components/Basics/Grid'
-import AssemblingCube from '../../components/FlippingCubes/AssemblingCube'
+import AssemblingCube from './AssemblingCube'
 import { random, isPerpendicular } from '../../lib/utils'
 import { DIRECTIONS } from '../../lib/constants'
-import { AssemblingNode } from '../../lib/Graph'
+import { AssemblingNode } from './AssemblingCubesNode'
 
 class Game {
   constructor(targetGridJSON, scene) {
@@ -38,8 +38,8 @@ class Game {
         this.grid.set(coords, 0)
       }
     })
+    // place real box randomly
     this.targets.forEach(e => {
-      // place real box randomly
       const x = random(0, this.grid.shape.x, true)
       const y = 0 // place somewhere on the ground
       const z = random(0, this.grid.shape.z, true)
@@ -49,7 +49,7 @@ class Game {
 
       const cube = new AssemblingCube({
         position: randomWorldPos,
-        speed: 3,
+        speed: 3, // speed must be a divisor of 90
         size: this.grid.scale,
       })
       cube.addTo(this.scene)
@@ -164,7 +164,10 @@ class Game {
   }
 
   animate() {
-    this.cubes.forEach(e => e.assemble(this))
+    this.cubes.forEach((e, i) => {
+      if (i === 0) console.log(e.gridPos)
+      e.assemble(this)
+    })
   }
 }
 

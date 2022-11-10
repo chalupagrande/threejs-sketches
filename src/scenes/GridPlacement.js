@@ -14,8 +14,8 @@ function GridPlacement(canvas) {
   let opts = {
     w: window.innerWidth,
     h: window.innerHeight,
-    voxelSize: 20,
-    gridSize: 10,
+    voxelSize: 10,
+    gridSize: 50,
   }
 
   let scene,
